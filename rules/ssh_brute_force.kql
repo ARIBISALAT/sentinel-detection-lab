@@ -1,0 +1,5 @@
+Syslog
+| where Facility in ("auth", "authpriv")
+| where SyslogMessage has_any ("Failed password", "authentication failure")
+| summarize FailureCount = count() by Computer, HostIP, ProcessName, bin(TimeGenerated, 5m)
+| where FailureCount >= 5

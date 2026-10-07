@@ -1,0 +1,5 @@
+Syslog
+| where Facility in ("auth", "authpriv")
+| where ProcessName == "sudo"
+| where SyslogMessage has_any ("NOT in sudoers", "authentication failure", "1 incorrect password attempt")
+| summarize FailedSudoCount = count() by Computer, SyslogMessage, bin(TimeGenerated, 5m)
